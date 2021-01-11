@@ -12,7 +12,7 @@ ta404:
         jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srd404
         driverClassName: org.postgresql.Driver
         username: postgres
-        password: postgres
+        password: 123123
 #        username: sfrz404
 #        password: sfrz404
 #        password: postgres
