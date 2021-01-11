@@ -6,6 +6,6 @@ package java;
 public class Test {
   int j =0;
     int r =1;
-
+  int a =5;
     int b =7;
 }
