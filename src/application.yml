@@ -7,9 +7,9 @@ ta404:
           local-cache-scope: statement
           cache-enabled: false
         page-dialect: postgresql
-        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srd404
+#        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srd404
 #        jdbcUrl: jdbc:postgresql://127.0.0.1:5432/srd404
-#        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srd404
+        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srd404
         driverClassName: org.postgresql.Driver
         username: postgres
         password: postgres
@@ -35,8 +35,8 @@ ta404:
           local-cache-scope: statement
           cache-enabled: false
         page-dialect: postgresql
-        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srdoa
-#        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srdoa
+#        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srdoa
+        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srdoa
         driverClassName: org.postgresql.Driver
         username: postgres
         password: postgres
