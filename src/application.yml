@@ -1,0 +1,243 @@
+ta404:
+  database:
+    mybatis:
+      datasourceList: ta404ds,oa
+      ta404ds:
+        configuration:
+          local-cache-scope: statement
+          cache-enabled: false
+        page-dialect: postgresql
+        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srd404
+#        jdbcUrl: jdbc:postgresql://127.0.0.1:5432/srd404
+#        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srd404
+        driverClassName: org.postgresql.Driver
+        username: postgres
+        password: postgres
+#        username: sfrz404
+#        password: sfrz404
+#        password: postgres
+        mappers:
+          - com.yinhai.ta404.module.mybatis.mapper
+          - com.yinhai.ta404.module.**.mapper.read
+          - com.yinhai.ta404.module.**.mapper.write
+          - com.yinhai.ta404.component.**.mapper.read
+          - com.yinhai.ta404.component.**.mapper.write
+        type-aliases-package:
+          - com.yinhai.ta404.component.**.entity
+        mapper-locations:
+          - classpath*:mapper/read/*.xml
+          - classpath*:mapper/write/*.xml
+        transaction: #用于扩展事务管理器属性
+          enforceReadOnly: true #表示DataSourceTrasactionManager支持只读事务，某些数据库不支持此属性，需要关闭
+      #        sqlsessionfactory: #用于扩展sqlSessionFactory属性
+      oa:
+        configuration:
+          local-cache-scope: statement
+          cache-enabled: false
+        page-dialect: postgresql
+        jdbcUrl: jdbc:postgresql://10.1.235.196:54330/srdoa
+#        jdbcUrl: jdbc:postgresql://192.168.60.20:5432/srdoa
+        driverClassName: org.postgresql.Driver
+        username: postgres
+        password: postgres
+#        username: oa
+#        password: oa
+#        password: postgres
+        minimumIdle: 5
+        mappers:
+          - com.yinhai.oa.module.**.mapper.read
+          - com.yinhai.oa.module.**.mapper.write
+          - com.yinhai.oa.workflow.mapper.write
+          - com.yinhai.oa.workflow.mapper.read
+          - com.yinhai.oa.common.mapper.write
+          - com.yinhai.oa.common.mapper.read
+          #自定义公共类
+          - com.yinhai.oa.common.mapper
+        type-aliases-package:
+          - com.yinhai.oa.module.**.entity
+          - com.yinhai.oa.workflow.entity
+          - com.yinhai.oa.common.entity
+          - com.yinhai.oa.common.**.entity
+        mapper-locations:
+          - classpath*:mapper/read/*.xml
+          - classpath*:mapper/write/*.xml
+        transaction: #用于扩展事务管理器属性
+          enforceReadOnly: true #表示DataSourceTrasactionManager支持只读事务，某些数据库不支持此属性，需要关闭
+        #        sqlsessionfactory: #用于扩展sqlSessionFactory属性
+    transaction:
+      log: true
+      #启动事务类检测，只检测以下包路径开头的类
+      packageStartCheck: com.yinhai
+  modules:
+    accesssystem:
+      syscode: sysmg
+      isportal: false
+      loadOtherSystemMenu:
+#      loadOtherSystemMenu: oaznhw
+    cluster:
+      enable: false
+    cache:
+      register: false
+      mode: ehcache
+    distribute:
+      startLcn: false
+    security:
+      password-firstlogin: false
+      isOpenSecuirtyManagemer: true # 是否使用springsecurity管理
+      permitUrls:
+        - /error
+        - /loginRestService/getConfig
+        - /loginRestService/changePassword
+        - /loginRestService/checkUser
+        - /CaptchaImg**
+        - /publish
+        - /template/**
+        - /template/mobile/**
+        - /framework/**
+        - /oaChunkfile/uploadChunk
+        - /oaResource/getUserResource
+        - /codetable/**
+        - /jwtLogin
+        - /packInfo/**
+        - /packInfoController/**
+        - /dictmg/**
+        - /oaProtocol/**
+        - /oaMineResource/getMiddlePage
+        - /scheduleAccess/*
+        - /oaAffairApply/**
+        - /light/**
+        - /rest/**
+        - /oaUserManageRestService/saveIconUrl
+        - /news/**
+        - /passwd/encryptWidthEncode
+        - /oaOrderCanteen/provideOrderDataToOut
+        - /oaOrderCanteen/provideMonthOrderDataToOut
+      loginPermitUrls:
+        - /trip/**
+        - /indexRestService/getCurUserAccount
+        - /codetable/getCode
+        - /menu/menuAction/queryRootChildrenMenus
+        - /indexRestService/defaultOpen
+        - /indexRestService/changePassword
+        - /org/sysmg/workbenchRestService/**
+        #        业务添加
+        - /baseCommonService/**
+        - /OfficialDocApprovalService/**
+        - /freeProcessService/**
+        - /oa**/**
+        - /missive**/**
+        - /org/orguser/**
+        - /oaChunkfile/merge
+        - /vacation**/**
+        - /calendarConfInfo/**
+        - /freebackRecord/**
+        - /optDateInfo/**
+        - /workOvertime**/**
+        - /safetyVerification/**
+    smsmessage:
+      enable: true #对外开启SMS服务, 目前只有身份认证系统开启
+    jwt:
+      enable: true
+      expirTime: 86400
+      token-name: ta-jtoken # jwt认证与mobile认证, token-name一样时, 要求user-aes-secret-key 与 secret-key 也必须一样
+      user-aes-secret-key: tatokenAesKey123
+      secret-key: tatokenKey321
+      passMaxErrorNum: 5
+      passFirstLogin: false
+    mobile:
+      enable: true
+      expirTime: 86400
+      token-name: ta-jtoken  # jwt认证与mobile认证, token-name一样时, 要求user-aes-secret-key 与 secret-key 也必须一样
+      user-aes-secret-key: tatokenAesKey123
+      secret-key: tatokenKey321
+    captcha:
+      userCheckCode: false
+    elasticjob:
+      enable: false
+      zk:
+        serverLists: 192.168.17.30:2182
+        namespace: ta404-job
+      job:
+        statLogJob:
+          cron: 0/5 * * * * ?
+          shardingTotalCount: 1
+          shardingItemParameters: 0=A
+          disabled: true
+          overwrite: true
+          description: 登录人数统计
+        #          eventTraceRdbDataSource: ta404ds
+        freeBusyJob:
+          cron: 0 */1 * * * ?
+          shardingTotalCount: 1
+          streamingProcess: false
+          disabled: true
+          overwrite: true
+          description: 闲忙任务
+#         eventTraceRdbDataSource: ta404ds
+# 统一设置日期格式
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  activiti:
+    check-process-definitions: false
+    async-executor-activate: true
+    database-schema-update: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 500MB
+  profiles:
+    active: cas,light
+  mvc:
+    view:
+      suffix: .html
+      prefix: /template
+ucm:
+  #统一存储总控地址
+#  url_yhucmmg: http://192.168.60.20:9030/yhucmmg
+#  url_yhucmmg: http://192.168.31.99:8081/yhucmmg
+  url_yhucmmg: http://10.1.235.196:7770/yhucmmg
+  sysid: oa
+  addrcode: 5100
+  isexternal: 1 #是否外部寻址
+  expiretime: 6000 #临时key过期时间，单位秒，为0表示只能下载一次
+bcp:
+#  yhbcp_url: http://192.168.31.99:8083/yhbcp-engine
+  yhbcp_url: http://10.1.235.196:7730/yhbcp-engine
+outernet: #外网配置
+  protocol: https
+  ip: oa.scspc.gov.cn
+  port: 8080
+  content: oa
+#  protocol: http
+#  ip: 222.210.127.135
+#  port: 7200
+#  content: oa
+
+com:
+  yinhai:
+#    oogemsg_server_url: https://192.168.60.20:9020/msgServer/ooge/
+#    oogemsg_server_url: http://192.168.31.99:9020/msgServer/ooge/
+    oogemsg_server_url: http://172.25.56.26:9020/msgServer/ooge/
+    oa:
+      role-prop:
+        njdj-gly: "ae893ddaae564ce18a4cbc0b96ec451d" #年假登记管理员 测试环境
+#        njdj-gly: "08cb409200474ebc83fc789ee2c6fdd5" #年假登记管理员 正式环境
+middlepage:
+  url: http://222.210.127.135:8803/oa/template/mobile/mine.html#/
+#  url: http://222.210.127.135:9010/oa/template/mobile/mine.html#/
+  title: 我的
+overtimeroles:
+  overtime_dept: "2a16543422ac42438f02e7bf405a4bba"           #加班角色，加班部门管理员
+  overtime_personnel: "28a13038c9e446669e8eccb8c45828bc"      #加班角色，加班人事管理员
+  overtime_finance: "db99adbb93fa49bdb7921390a57aec09"        #加班角色，加班财务管理员
+  overtime_individual: "80282540ef5641ebbd4f25f3116bd29d"     #加班角色，加班个人
+
+# 领导orgIds
+leaderorgs: "5b6cfbcdb74f4fc69c85a96fb1e42b36,11c794b8ea694d84a4be61759de2c77b,0ef960e736a24bf39e1d78a6c0233125"
+# 常委会领导orgIds
+cwhleaderorgs: "5b6cfbcdb74f4fc69c85a96fb1e42b36"
+appRemoteBathPath: "http://222.210.127.135:8803/mobile"
+# 前端app bathpath
+appBathPath: "http://222.210.127.135:8803/mobile"
