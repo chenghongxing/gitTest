@@ -8,4 +8,5 @@ public class Test {
     int r =1;
   int a =5;
     int b =7;String ae="";
+    String gg = "版本回退";
 }
